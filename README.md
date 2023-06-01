@@ -5,7 +5,7 @@ This file contains solutions to question 3 & 4 of the "Bitnine Apache Internship
 
 Question 3
 
-Please find in this directory a file named "question 3" containing solution to the third question for this assessment.
+Please find in this directory a file named "question 3" containing a solution to the third question for this assessment written in python.
 
 Solution Steps
 

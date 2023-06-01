@@ -14,3 +14,13 @@ Solution Steps
 3. The function returns the results in a json string format using the json.dumps method.
 
 
+
+Question 4
+
+Please find in this directory a file named "question 4" containing a dash program that displays network graphs and figures showing car model price data from the files contained in the "backend/test-data" folder in the AGE Viewer repository.
+
+Solution Steps
+
+1. Several libraries including the dash, plotly, networkx, pandas are imported to build the different components of this dash application.
+2. A callback decorator and get_nx_info function are used to retrieve input from a dropdown menu containing car producers and to create network graghs linking car-producers to their respective models.
+3. Another callback decorator and get_model_price function are used to also retrieve input(s) from a multi-select dropdown menu containing car producers and to create bar plots showing model price information for the different car producers.

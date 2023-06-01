@@ -1,0 +1,82 @@
+import dash
+from dash import dcc
+from dash import  html
+import plotly
+import plotly.graph_objs as go
+import pandas as pd
+from dash.dependencies import Output, Input
+import networkx as nx
+import matplotlib.pyplot as plt
+import io
+import base64
+import dash_bootstrap_components as dbc
+
+
+app=dash.Dash()
+
+
+has_model_df=pd.read_csv('has_model.csv')
+make_df= pd.read_csv('make.csv')
+make_df.rename(columns={'name':'make_name'}, inplace=True)
+model_df = pd.read_csv('model.csv')
+model_df.rename(columns={'name':'model_name'}, inplace=True)
+new_df=pd.merge(has_model_df,make_df, left_on='start_id', right_on='id',).merge(model_df, left_on='end_id',right_on='id')
+df_cars=new_df[['make_name', 'model_name', 'price']]
+
+
+def get_nx(df):
+    plt.clf()
+    G = nx.from_pandas_edgelist(df, 'make_name', 'model_name', create_using=nx.Graph())
+    buf = io.BytesIO() 
+    nx.draw(G, with_labels=True)
+    f=plt.savefig(buf, format = "png") 
+    data = base64.b64encode(buf.getbuffer()).decode("utf8")
+    buf.close()
+    image="data:image/png;base64,{}".format(data)
+    return image
+
+make_list=['All CAR Producers']
+for i in df_cars['make_name'].unique():
+    make_list.append(i)
+
+
+app.layout=dbc.Container([html.H4('Select item from dropdown to show Network Graph'),
+                        html.Div([dcc.Dropdown(id='make-picker1',options=make_list,placeholder='Select Car Make'),
+                        html.Img(id='nx_fig', src=plt.clf()),
+                        html.H4('Select item(s) from dropdown  below to show and compare model prices'),
+                        dcc.Dropdown(id='make-picker2',options=df_cars['make_name'].unique(),placeholder='Select Car Make', multi=True),
+                        dcc.Graph(id='model_figure')
+                      ]) ])
+
+
+@app.callback(
+    Output('nx_fig','src'),[Input('make-picker1','value')])
+def get_nx_info(make):
+    if make=='All CAR Producers':
+        return get_nx(df_cars)
+    else:
+        make_filter=df_cars[df_cars['make_name']==make][['make_name','model_name']]
+        return get_nx(make_filter)
+ 
+
+@app.callback(
+    Output('model_figure','figure'),[Input('make-picker2','value')])
+def get_model_price(make2):
+    final_bar=[]
+    if make2:
+        for item in make2:
+            make_filter=df_cars[df_cars['make_name']==item][['make_name','model_name','price']]
+            if item=="Ferrari":
+                make_filter['model_name']=make_filter['model_name'].apply(lambda x: "Model no: "+str(x))       
+            bar_plot=go.Bar(x=make_filter['model_name'], y=make_filter['price'].values,name=item,
+                            hovertemplate='<i>Car make</i>: {car_make}<br>'.format(car_make=item)+'<b>Model </b>: %{x}<br>'+'<b>Price</b>: %{y}')
+            final_bar.append(bar_plot)
+    return {'data':final_bar}
+
+
+
+
+if __name__=='__main__':
+    app.run_server()
+
+

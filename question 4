@@ -12,7 +12,7 @@ import base64
 import dash_bootstrap_components as dbc
 
 
-app=dash.Dash()
+app=dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 
 has_model_df=pd.read_csv('has_model.csv')
@@ -40,10 +40,10 @@ for i in df_cars['make_name'].unique():
     make_list.append(i)
 
 
-app.layout=dbc.Container([html.H4('Select item from dropdown to show Network Graph'),
+app.layout=dbc.Container([html.H4('Select item from dropdown to show Network Graph', style={'paddingTop':15}),
                         html.Div([dcc.Dropdown(id='make-picker1',options=make_list,placeholder='Select Car Make'),
                         html.Img(id='nx_fig', src=plt.clf()),
-                        html.H4('Select item(s) from dropdown  below to show and compare model prices'),
+                        html.H4('Select item(s) from dropdown  below to show and compare model prices', style={'paddingTop':15}),
                         dcc.Dropdown(id='make-picker2',options=df_cars['make_name'].unique(),placeholder='Select Car Make', multi=True),
                         dcc.Graph(id='model_figure')
                       ]) ])

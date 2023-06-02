@@ -10,7 +10,7 @@ Please find in this directory a file named "question 3" containing a solution to
 Solution Steps
 
 1. Create_engine and text modules are imported from the sqlalchemy library to establish connection to the Postgres database.
-2. A get_json function is created to implement an algorithm  that appends data objects extracted from the database to a dictionary in the required format.
+2. A get_json function is created to implement an algorithm that appends data objects extracted from the database to a dictionary in the required format.
 3. The function returns the results in a json string format using the json.dumps method.
 
 
@@ -18,7 +18,7 @@ Solution Steps
 
 Question 4
 
-Please find in this directory a file named "question 4" containing a dash program that displays network graphs and figures showing car model price data from the files contained in the "backend/test-data" folder in the AGE Viewer repository.
+Please find in this directory a file named "question 4" containing a dash program that displays network graphs and figures showing car model price data from the files contained in the "backend/test/test-data" folder in the AGE Viewer repository.
 
 Solution Steps
 
